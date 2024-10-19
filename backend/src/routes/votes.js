@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { putVote } from '../controllers/votes.js';
-const votesRouter = Router();
+import { authenticateToken } from '../Auth/middleware.js';
 
-votesRouter.post('/', putVote);
+const votesRouter = Router();
+votesRouter.post('/', authenticateToken, putVote);
+
 export default votesRouter;

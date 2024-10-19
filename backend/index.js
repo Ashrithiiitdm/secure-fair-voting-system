@@ -1,9 +1,11 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import candidateRouter from './src/routes/candidates.js';
 import votersRouter from './src/routes/voters.js';
 import votesRouter from './src/routes/votes.js';
 import votingRoomsRouter from './src/routes/votingRooms.js';
+dotenv.config();
 
 const app = express();
 

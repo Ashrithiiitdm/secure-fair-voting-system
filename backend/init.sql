@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS Voting_rooms (
   room_description TEXT,         -- Optional description of the voting room
   expiry TIMESTAMP,         -- Expiry date of the voting room
   created_at TIMESTAMP DEFAULT NOW()  -- Timestamp for when the room was created
+  status VARCHAR(20) DEFAULT 'open' CHECK (status IN ('open', 'closed', 'announced'))
 );
 
 CREATE TABLE IF NOT EXISTS Candidates (
@@ -26,9 +27,11 @@ CREATE TABLE IF NOT EXISTS Voters (
   created_at TIMESTAMP DEFAULT NOW()  -- Timestamp for when the voter was added
 );
 
-CREATE TABLE Votes (
-  vote_id SERIAL PRIMARY KEY,           -- Unique identifier for each vote entry
-  voter_id INTEGER REFERENCES Voters(voter_id) ON DELETE CASCADE,  -- Foreign key to identify the voter
-  candidate_id INTEGER REFERENCES Candidates(candidate_id) ON DELETE CASCADE,  -- Foreign key to identify the candidate
-  created_at TIMESTAMP DEFAULT NOW()  -- Timestamp for when the vote was cast
+CREATE TABLE IF NOT EXISTS Votes (
+  vote_id SERIAL PRIMARY KEY,
+  voter_id INTEGER REFERENCES Voters(voter_id) ON DELETE CASCADE,
+  candidate_id INTEGER REFERENCES Candidates(candidate_id) ON DELETE CASCADE,
+  votes FLOAT NOT NULL,
+  weighted_votes FLOAT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
