@@ -1,13 +1,12 @@
 import { Router } from 'express';
-import { createVotingRoom, getVotingRoom, getAllVotingRooms, getResults } from '../controllers/votingRooms.js'
-import { authenticateToken } from '../Auth/middleware.js';
+import { createVotingRoom, getVotingRoom, getAllVotingRooms, getResults, announceResults } from '../controllers/votingRooms.js'
 
 const votingRoomsRouter = Router();
 
-votingRoomsRouter.post('/', authenticateToken, createVotingRoom);
-votingRoomsRouter.get('/', authenticateToken, getAllVotingRooms);
-votingRoomsRouter.get('/:room_id', authenticateToken, getVotingRoom);
-votingRoomsRouter.get('/:room_id/results', authenticateToken, getResults);
-votingRoomsRouter.post('/:room_id/announce', authenticateToken, announceResults);
+votingRoomsRouter.post('/', createVotingRoom);
+votingRoomsRouter.get('/', getAllVotingRooms);
+votingRoomsRouter.get('/:room_id', getVotingRoom);
+votingRoomsRouter.get('/:room_id/results', getResults);
+votingRoomsRouter.post('/:room_id/announce', announceResults);
 
 export default votingRoomsRouter;
