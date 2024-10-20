@@ -6,8 +6,14 @@ export const createVotingRoom = async (req, res) => {
 
     try {
         const result = await pool.query(
-            `INSERT INTO Voting_rooms (room_name, room_description, duration, duration_unit)
-            VALUES ($1, $2, $3, $4) RETURNING *`,
+            `INSERT INTO Voting_rooms (room_name, room_description, duration, duration_unit, expiry)
+            VALUES ($1, $2, $3::integer, $4::varchar(10), 
+                CASE 
+                    WHEN $4::varchar(10) = 'minutes' THEN NOW() + ($3::integer || ' minutes')::INTERVAL
+                    WHEN $4::varchar(10) = 'hours' THEN NOW() + ($3::integer || ' hours')::INTERVAL
+                    ELSE NOW() + INTERVAL '1 hour' -- Default to 1 hour if unit is invalid
+                END
+            ) RETURNING *`,
             [room_name, room_description, duration, duration_unit]
         );
         
